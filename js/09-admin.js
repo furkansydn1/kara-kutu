@@ -39,11 +39,11 @@ export function yonetimCiz(kap) {
 // --- Soru oluşturma ---------------------------------------------------------
 function soruLevhasi() {
   levha(kapat => {
-    let tur = "classic";
+    let tur = "choice";
     const metin = el("textarea", { class: "textarea",
       placeholder: "Bu grupta kim sevgilisine en çok yalan söyler?" });
 
-    const secKutu = el("div", { class: "opt-editor hidden" });
+    const secKutu = el("div", { class: "opt-editor" });
     const secEkle = (deger = "") => {
       const inp = el("input", { class: "input", value: deger, placeholder: "Seçenek metni" });
       const satir = el("div", { class: "opt-editor__row" }, inp,
@@ -54,10 +54,10 @@ function soruLevhasi() {
     secEkle(); secEkle();
 
     const turSec = el("div", { class: "options" },
-      turDugmesi("classic", "Kim · gruptan biri", true),
-      turDugmesi("choice", "Seçmeli · kendi şıkların", false));
+      turDugmesi("choice", "Seçmeli · şıkları sen yazarsın", "S", true),
+      turDugmesi("text", "Açık uçlu · herkes kendi cevabını yazar", "A", false));
 
-    function turDugmesi(deger, etiket, secili) {
+    function turDugmesi(deger, etiket, harf, secili) {
       const b = el("button", { class: `option ${secili ? "is-picked" : ""}`, type: "button",
         onclick: () => {
           tur = deger;
@@ -65,14 +65,19 @@ function soruLevhasi() {
           b.classList.add("is-picked");
           secKutu.classList.toggle("hidden", deger !== "choice");
           ekleBtn.classList.toggle("hidden", deger !== "choice");
+          uyari.classList.toggle("hidden", deger !== "text");
         }},
-        el("span", { class: "option__key" }, deger === "classic" ? "K" : "S"),
+        el("span", { class: "option__key" }, harf),
         el("span", { class: "grow" }, etiket));
       return b;
     }
 
-    const ekleBtn = el("button", { class: "btn btn--ghost btn--sm hidden", type: "button",
+    const ekleBtn = el("button", { class: "btn btn--ghost btn--sm", type: "button",
       onclick: () => secEkle() }, "+ Seçenek ekle");
+
+    const uyari = el("p", { class: "eyebrow hidden",
+      style: "line-height:1.6;padding-left:12px;border-left:2px solid var(--seal)" },
+      "Açık uçluda cevaplar isimsiz listelenir. Ama 8 kişilik grupta yazı tarzı ele verir — hassas sorular için seçmeli kullan.");
 
     const bugun = new Date();
     const acilis = el("input", { class: "input mono", type: "datetime-local",
@@ -90,6 +95,11 @@ function soruLevhasi() {
         : [];
       if (tur === "choice" && secenekler.length < 2) return toast("En az 2 seçenek gerekli.", "bad");
 
+      const acilisT = new Date(acilis.value), acilmaT = new Date(acilma.value);
+      if (isNaN(acilisT) || isNaN(acilmaT)) return toast("Tarihleri doldur.", "bad");
+      if (acilmaT <= acilisT) return toast("Mühür açılışı, düşme saatinden sonra olmalı.", "bad");
+      if (acilmaT <= new Date()) return toast("Mühür açılışı geçmişte kalmış. İleri bir saat seç.", "bad");
+
       kaydet.disabled = true; kaydet.textContent = "Açılıyor…";
       try {
         const sayi = (await getDocs(collection(db, "questions"))).size + 1;
@@ -98,12 +108,14 @@ function soruLevhasi() {
           type: tur,
           text: t,
           options: secenekler,
-          openAt: Timestamp.fromDate(new Date(acilis.value)),
-          revealAt: Timestamp.fromDate(new Date(acilma.value)),
+          openAt: Timestamp.fromDate(acilisT),
+          revealAt: Timestamp.fromDate(acilmaT),
           totalVotes: 0,
           createdAt: serverTimestamp()
         });
-        await setDoc(doc(db, "questions", ref.id, "tally", "counts"), { counts: {} });
+        if (tur === "choice") {
+          await setDoc(doc(db, "questions", ref.id, "tally", "counts"), { counts: {} });
+        }
         toast("Soru açıldı.", "win");
         arsiviTazele();
         kapat();
@@ -117,6 +129,7 @@ function soruLevhasi() {
     return el("div", { class: "stack gap-3" },
       el("h3", { style: "font-size:1.375rem" }, "Yeni soru"),
       el("div", { class: "field" }, el("label", {}, "Tür"), turSec),
+      uyari,
       el("div", { class: "field" }, el("label", {}, "Soru"), metin),
       secKutu, ekleBtn,
       el("div", { class: "field" }, el("label", {}, "Ne zaman düşsün"), acilis),
@@ -355,10 +368,13 @@ async function oylariAc(s) {
       kutu.append(el("div", { style: "font-size:.875rem;color:var(--bone-2)" }, "Henüz oy yok."));
     } else {
       snap.docs.forEach(d => {
-        const secim = secenekler.find(o => o.id === d.data().optionId);
+        const v = d.data();
+        const cevap = v.text !== undefined
+          ? v.text
+          : (secenekler.find(o => o.id === v.optionId)?.label || "—");
         kutu.append(el("div", { class: "secret__row" },
           el("span", {}, uyeAdi(d.id)),
-          el("span", {}, secim?.label || "—")));
+          el("span", { style: "text-align:right;max-width:60%" }, cevap)));
       });
     }
     return el("div", { class: "stack gap-3" },
