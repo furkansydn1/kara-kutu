@@ -73,7 +73,7 @@ export function bugunCiz(kap) {
 
   if (acildiMi(soru))       panel.append(...sonucBlogu(soru));
   else if (S.oyum)          panel.append(muhurBlogu(soru));
-  else                      panel.append(oyBlogu(soru, panel));
+  else                      panel.append(...oyBlogu(soru, panel));
 
   kap.append(panel);
 }
