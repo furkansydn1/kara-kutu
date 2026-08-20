@@ -1,0 +1,60 @@
+/* ==========================================================================
+   KARA KUTU — 01 tokens
+   Renk anlam taşır:  amber = açık/canlı · seal = mühürlü · verdigris = sonuçlanmış
+   ========================================================================== */
+
+:root {
+  /* Gövde — soğuk arduvaz-teal, düz siyah değil */
+  --hull-900: #0E1518;
+  --hull-800: #141E22;
+  --hull-700: #1B282D;
+  --hull-600: #23343A;
+  --line:     #2E434B;
+  --line-soft:#223238;
+
+  /* Metin */
+  --bone:     #E9E4D8;
+  --bone-2:   #A8B4B2;
+  --bone-3:   #6E7D7C;
+
+  /* Durum renkleri */
+  --amber:    #FFAA1F;
+  --amber-dim:#8A5D14;
+  --seal:     #D9412F;
+  --seal-dim: #7A2419;
+  --verdigris:#4FB3A0;
+  --verdigris-dim:#2A5D55;
+
+  /* Tipografi */
+  --f-display: 'Archivo', 'Segoe UI', sans-serif;
+  --f-body:    'IBM Plex Sans', system-ui, sans-serif;
+  --f-mono:    'IBM Plex Mono', ui-monospace, monospace;
+
+  --t-xs:  0.6875rem;
+  --t-sm:  0.8125rem;
+  --t-md:  0.9375rem;
+  --t-lg:  1.125rem;
+  --t-xl:  1.5rem;
+  --t-2xl: 2rem;
+  --t-3xl: 2.75rem;
+
+  /* Ölçü */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 24px; --sp-6: 32px; --sp-7: 48px; --sp-8: 64px;
+
+  --r-sm: 2px;
+  --r-md: 4px;
+  --r-lg: 8px;
+
+  --bar-h: 68px;           /* alt sekme yüksekliği */
+  --wrap: 620px;
+}
+
+/* Sistem "hareketi azalt" derse dinleriz */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

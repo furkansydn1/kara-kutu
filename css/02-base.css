@@ -1,0 +1,86 @@
+/* ==========================================================================
+   KARA KUTU — 02 base
+   ========================================================================== */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  background: var(--hull-900);
+  color: var(--bone);
+  font-family: var(--f-body);
+  font-size: var(--t-md);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* Gövde dokusu: cihaz paneli gibi ince tarama çizgileri */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background-image: repeating-linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.014) 0px,
+    rgba(255,255,255,0.014) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--f-display);
+  font-weight: 800;
+  font-stretch: 112%;
+  letter-spacing: -0.015em;
+  line-height: 1.08;
+  margin: 0;
+}
+
+p { margin: 0 0 var(--sp-3); }
+
+button, input, select, textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button { cursor: pointer; border: none; background: none; }
+
+a { color: var(--amber); }
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 2px;
+}
+
+::selection { background: var(--amber); color: var(--hull-900); }
+
+/* Yardımcılar */
+.hidden { display: none !important; }
+
+.mono {
+  font-family: var(--f-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+.eyebrow {
+  font-family: var(--f-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bone-3);
+}
+
+.stack   { display: flex; flex-direction: column; }
+.row     { display: flex; align-items: center; }
+.between { justify-content: space-between; }
+.gap-1 { gap: var(--sp-1); } .gap-2 { gap: var(--sp-2); }
+.gap-3 { gap: var(--sp-3); } .gap-4 { gap: var(--sp-4); }
+.gap-5 { gap: var(--sp-5); }
+.grow  { flex: 1; }

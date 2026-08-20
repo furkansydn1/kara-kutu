@@ -1,0 +1,172 @@
+/* ==========================================================================
+   KARA KUTU — 03 layout
+   ========================================================================== */
+
+#app {
+  position: relative;
+  z-index: 1;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- Üst şerit ------------------------------------------------------------ */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4);
+  background: color-mix(in srgb, var(--hull-900) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.brand {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-2);
+}
+
+.brand__mark {
+  font-family: var(--f-display);
+  font-weight: 900;
+  font-stretch: 125%;
+  font-size: var(--t-lg);
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+}
+
+.brand__unit {
+  font-family: var(--f-mono);
+  font-size: var(--t-xs);
+  color: var(--amber);
+  letter-spacing: 0.12em;
+}
+
+.topbar__right { display: flex; align-items: center; gap: var(--sp-2); }
+
+.balance {
+  font-family: var(--f-mono);
+  font-size: var(--t-sm);
+  font-weight: 500;
+  color: var(--amber);
+  background: color-mix(in srgb, var(--amber) 10%, transparent);
+  border: 1px solid var(--amber-dim);
+  border-radius: var(--r-sm);
+  padding: 3px 8px;
+  white-space: nowrap;
+}
+
+.bell {
+  position: relative;
+  width: 34px; height: 34px;
+  display: grid; place-items: center;
+  border: 1px solid var(--line);
+  border-radius: var(--r-sm);
+  color: var(--bone-2);
+}
+.bell:hover { color: var(--bone); border-color: var(--bone-3); }
+
+.bell__dot {
+  position: absolute;
+  top: -4px; right: -4px;
+  min-width: 16px; height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--seal);
+  color: #fff;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  font-weight: 600;
+  display: grid; place-items: center;
+}
+
+/* --- İçerik --------------------------------------------------------------- */
+main {
+  flex: 1;
+  width: 100%;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: var(--sp-5) var(--sp-4) calc(var(--bar-h) + var(--sp-7));
+}
+
+.view { animation: viewIn 0.22s ease both; }
+@keyframes viewIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+.view__head { margin-bottom: var(--sp-5); }
+.view__head h2 {
+  font-size: var(--t-2xl);
+  text-transform: uppercase;
+  font-stretch: 125%;
+}
+.view__head .eyebrow { display: block; margin-bottom: var(--sp-2); }
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  margin: var(--sp-6) 0 var(--sp-3);
+  font-family: var(--f-mono);
+  font-size: var(--t-xs);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bone-3);
+}
+.section-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line-soft);
+}
+
+/* --- Alt sekmeler --------------------------------------------------------- */
+.tabbar {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  z-index: 40;
+  height: calc(var(--bar-h) + env(safe-area-inset-bottom));
+  padding-bottom: env(safe-area-inset-bottom);
+  display: flex;
+  background: color-mix(in srgb, var(--hull-800) 96%, transparent);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid var(--line);
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: var(--bone-3);
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  position: relative;
+  transition: color 0.15s;
+}
+.tab svg { width: 21px; height: 21px; }
+.tab:hover { color: var(--bone-2); }
+
+.tab.is-active { color: var(--amber); }
+.tab.is-active::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 26px; height: 2px;
+  background: var(--amber);
+}
+
+@media (min-width: 720px) {
+  main { padding-top: var(--sp-6); }
+}
