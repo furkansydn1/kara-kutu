@@ -124,7 +124,7 @@
   border: 1px solid var(--line);
   color: var(--bone-3);
 }
-.qtype--classic { border-color: var(--verdigris-dim); color: var(--verdigris); }
+.qtype--text    { border-color: var(--verdigris-dim); color: var(--verdigris); }
 .qtype--choice  { border-color: var(--amber-dim);     color: var(--amber); }
 
 /* --- Seçenekler ----------------------------------------------------------- */

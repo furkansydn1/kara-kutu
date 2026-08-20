@@ -284,3 +284,46 @@
 }
 .secret__row:last-child { border-bottom: none; }
 .secret__row span:last-child { color: var(--amber); }
+
+/* --- Açık uçlu cevaplar ---------------------------------------------------- */
+.answers { display: flex; flex-direction: column; gap: var(--sp-2); }
+
+.answer {
+  position: relative;
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4) var(--sp-3) var(--sp-5);
+  background: var(--hull-700);
+  border: 1px solid var(--line);
+  border-radius: var(--r-md);
+  font-size: var(--t-md);
+  line-height: 1.5;
+  color: var(--bone);
+  overflow-wrap: anywhere;
+}
+
+/* Tırnak işareti — cevabın alıntı olduğunu belli eder */
+.answer::before {
+  content: '\201C';
+  position: absolute;
+  left: 9px;
+  top: 4px;
+  font-family: var(--f-display);
+  font-size: 1.75rem;
+  line-height: 1;
+  color: var(--line);
+}
+
+.answer.is-mine {
+  border-color: var(--amber-dim);
+  background: color-mix(in srgb, var(--amber) 7%, var(--hull-700));
+}
+.answer.is-mine::after {
+  content: 'seninki';
+  display: block;
+  margin-top: 6px;
+  font-family: var(--f-mono);
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--amber);
+}
