@@ -11,11 +11,8 @@ export const firebaseConfig = {
   appId: "1:1016379292782:web:6b198f9fda11e0c51c7a7f"
 };
 
-// ⚠ 2. TURDA DOLDURULACAK
-// Siteyi yayına al → kayıt ol → Firebase > Authentication > Users
-// → User UID sütununu kopyala → aşağıdaki tırnak arasına yapıştır.
-// AYNI değeri firestore.rules dosyasına da yazacaksın.
-export const ADMIN_UID = "BURAYA_SENIN_UID";
+// Yönetici UID'i. firestore.rules içindeki yonetici() ile birebir aynı.
+export const ADMIN_UID = "Ae72wmqJxug1WiySDaRuKVJTRDh2";
 
 // Gruba WhatsApp'tan atacağın kod. İstediğin gibi değiştir.
 export const DAVET_KODU = "kutu2026";
