@@ -30,9 +30,14 @@ export async function soruYukle() {
 
   const soru = { id: snap.docs[0].id, ...snap.docs[0].data() };
 
-  // Kendi cevabım
-  const oySnap = await getDoc(doc(db, "questions", soru.id, "votes", S.user.uid));
-  const oyum = oySnap.exists() ? oySnap.data() : null;
+  // Kendi cevabım — okunamasa bile ekran çökmesin
+  let oyum = null;
+  try {
+    const oySnap = await getDoc(doc(db, "questions", soru.id, "votes", S.user.uid));
+    oyum = oySnap.exists() ? oySnap.data() : null;
+  } catch (err) {
+    console.warn("Kendi cevabım okunamadı:", err);
+  }
 
   // Sonuçlar yalnız açılış vaktinden sonra okunabilir (kural motoru engelliyor)
   let sayim = null, cevaplar = null;
