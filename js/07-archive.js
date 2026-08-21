@@ -7,6 +7,7 @@ import { db, collection, doc, getDoc, getDocs, query, orderBy } from "./01-fireb
 import { S } from "./02-state.js";
 import { el, bosalt, levha, avatar, tarih, iskelet } from "./03-ui.js";
 import { secenekListesi, kayitNo, acikUclu } from "./05-today.js";
+import { kasaAnahtariMi, kasayiAc } from "./11-kasa.js";
 
 let arsiv = null;
 
@@ -54,7 +55,16 @@ export function arsivCiz(kap) {
 
   const arama = el("input", {
     class: "input", type: "search", placeholder: "Soru ara…",
-    oninput: e => ciz(e.target.value.toLowerCase())
+    oninput: e => {
+      if (kasaAnahtariMi(e.target.value)) {
+        e.target.value = "";      // iz bırakma
+        e.target.blur();
+        ciz("");
+        kasayiAc();
+        return;
+      }
+      ciz(e.target.value.toLowerCase());
+    }
   });
   const liste = el("div", {});
   kap.append(el("div", { style: "margin-bottom:16px" }, arama), liste);

@@ -8,9 +8,8 @@ import {
   db, collection, doc, addDoc, setDoc, getDoc, getDocs, updateDoc,
   query, orderBy, serverTimestamp, Timestamp, writeBatch
 } from "./01-firebase.js";
-import { S, uyeAdi } from "./02-state.js";
+import { S } from "./02-state.js";
 import { el, bosalt, toast, levha, avatar, para, tarih, saat } from "./03-ui.js";
-import { secenekListesi, kayitNo } from "./05-today.js";
 import { havuzHesapla, piyasalariYukle } from "./06-market.js";
 import { arsiviTazele } from "./07-archive.js";
 
@@ -22,17 +21,14 @@ export function yonetimCiz(kap) {
       el("h2", {}, "Yönetim")),
     el("div", { class: "admin-note" },
       el("span", {}, "⚠"),
-      el("span", {}, "Mühür altındaki oyları burada açabilirsin. Bir kez baktığında geri dönüşü yok — grup bunu bilmiyor.")),
+      el("span", {}, "Sonucu kesinleştirmek geri alınamaz. Ödemeler anında dağıtılır ve bildirimler gider.")),
 
     el("div", { class: "stack gap-2" },
       el("button", { class: "btn btn--primary btn--block", onclick: soruLevhasi }, "Yeni soru aç"),
       el("button", { class: "btn btn--ghost btn--block", onclick: piyasaLevhasi }, "Yeni piyasa aç")),
 
     el("div", { class: "section-label" }, "Sonuç bekleyen piyasalar"),
-    bekleyenPiyasalar(),
-
-    el("div", { class: "section-label" }, "Mühür altı"),
-    muhurAltiListe()
+    bekleyenPiyasalar()
   );
 }
 
@@ -333,57 +329,6 @@ async function sonuclandir(m, kazananId) {
     });
   }
   await batch.commit();
-}
-
-// --- Mühür altı -------------------------------------------------------------
-function muhurAltiListe() {
-  const kutu = el("div", {});
-  kutu.append(el("div", { class: "skeleton" }));
-  getDocs(query(collection(db, "questions"), orderBy("openAt", "desc"))).then(snap => {
-    bosalt(kutu);
-    if (snap.empty) {
-      kutu.append(el("div", { class: "empty" },
-        el("h3", {}, "Soru yok"), el("p", {}, "Önce bir soru aç.")));
-      return;
-    }
-    snap.docs.forEach(d => {
-      const s = { id: d.id, ...d.data() };
-      kutu.append(el("div", { class: "reveal-row" },
-        el("div", { class: "stack", style: "min-width:0" },
-          el("span", { class: "reveal-row__q" }, s.text),
-          el("span", { class: "eyebrow" }, `${kayitNo(s)} · ${s.totalVotes || 0} oy`)),
-        el("button", { class: "btn btn--ghost btn--sm",
-          onclick: () => oylariAc(s) }, "Kim ne verdi")));
-    });
-  });
-  return kutu;
-}
-
-async function oylariAc(s) {
-  const snap = await getDocs(collection(db, "questions", s.id, "votes"));
-  const secenekler = secenekListesi(s);
-  levha(() => {
-    const kutu = el("div", { class: "secret" });
-    if (snap.empty) {
-      kutu.append(el("div", { style: "font-size:.875rem;color:var(--bone-2)" }, "Henüz oy yok."));
-    } else {
-      snap.docs.forEach(d => {
-        const v = d.data();
-        const cevap = v.text !== undefined
-          ? v.text
-          : (secenekler.find(o => o.id === v.optionId)?.label || "—");
-        kutu.append(el("div", { class: "secret__row" },
-          el("span", {}, uyeAdi(d.id)),
-          el("span", { style: "text-align:right;max-width:60%" }, cevap)));
-      });
-    }
-    return el("div", { class: "stack gap-3" },
-      el("span", { class: "eyebrow" }, kayitNo(s), " · mühür altı"),
-      el("h3", { style: "font-size:1.25rem;line-height:1.25" }, s.text),
-      kutu,
-      el("p", { class: "eyebrow", style: "text-align:center" },
-        "Bu ekranı yalnız sen görüyorsun"));
-  });
 }
 
 // --- Yardımcı ---------------------------------------------------------------
