@@ -16,7 +16,7 @@ export const ADMIN_UID = "Ae72wmqJxug1WiySDaRuKVJTRDh2";
 
 // Kasa anahtarı. Arşiv sekmesindeki arama kutusuna bunu yazınca
 // mühür altı dökümü açılır. Kimseye söyleme, tahmin edilmeyecek bir şey seç.
-export const GIZLI_SOZCUK = "kasa";
+export const GIZLI_SOZCUK = "sabırlıpirimatlar";
 
 // Gruba WhatsApp'tan atacağın kod. İstediğin gibi değiştir.
 export const DAVET_KODU = "kutu2026";
