@@ -46,13 +46,6 @@ export function arsivCiz(kap) {
     return;
   }
 
-  if (!arsiv.length) {
-    kap.append(el("div", { class: "empty" },
-      el("h3", {}, "Arşiv henüz boş"),
-      el("p", {}, "İlk soru açıldığında buraya düşer.")));
-    return;
-  }
-
   const arama = el("input", {
     class: "input", type: "search", placeholder: "Soru ara…",
     oninput: e => {
@@ -71,6 +64,12 @@ export function arsivCiz(kap) {
 
   function ciz(filtre = "") {
     bosalt(liste);
+    if (!arsiv.length) {
+      liste.append(el("div", { class: "empty" },
+        el("h3", {}, "Arşiv henüz boş"),
+        el("p", {}, "Mühürü açılan ilk soru buraya düşer.")));
+      return;
+    }
     const sonuc = arsiv.filter(s => !filtre || s.text.toLowerCase().includes(filtre));
     if (!sonuc.length) {
       liste.append(el("div", { class: "empty" },
